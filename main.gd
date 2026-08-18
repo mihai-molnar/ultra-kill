@@ -45,7 +45,7 @@ func start_round() -> void:
 
 func _spawn_enemy() -> void:
 	var enemy := Enemy.new()
-	var half: Vector2 = GameState.stats.target_size / 2.0
+	var half: Vector2 = GameState.stats.enemy_size / 2.0
 	var bounds := get_viewport_rect().size
 	enemy.position = Vector2(
 		randf_range(half.x, bounds.x - half.x),

@@ -46,7 +46,7 @@ func _process(delta: float) -> void:
 
 
 func get_rect() -> Rect2:
-	var size: Vector2 = GameState.stats.target_size
+	var size: Vector2 = GameState.stats.enemy_size
 	return Rect2(global_position - size / 2.0, size)
 
 
@@ -85,7 +85,7 @@ func _roll_direction() -> void:
 
 
 func _bounce_off_edges() -> void:
-	var half: Vector2 = GameState.stats.target_size / 2.0
+	var half: Vector2 = GameState.stats.enemy_size / 2.0
 	var bounds := get_viewport_rect().size
 	if global_position.x < half.x or global_position.x > bounds.x - half.x:
 		_velocity.x = -_velocity.x
