@@ -2,42 +2,42 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1"]
 [ext_resource type="Script" path="res://targeting_area.gd" id="2"]
-[ext_resource type="FontFile" path="res://fonts/RussoOne-Regular.ttf" id="3"]
+[ext_resource type="FontFile" path="res://fonts/PressStart2P-Regular.ttf" id="3"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_normal"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
 bg_color = Color(1, 0.945098, 0.921569, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color(0.0392157, 0.0352941, 0.0705882, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hover"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
 bg_color = Color(0.878431, 0.588235, 0.658824, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color(0.0392157, 0.0352941, 0.0705882, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pressed"]
-content_margin_left = 16.0
-content_margin_top = 8.0
-content_margin_right = 16.0
-content_margin_bottom = 8.0
+content_margin_left = 4.0
+content_margin_top = 2.0
+content_margin_right = 4.0
+content_margin_bottom = 2.0
 bg_color = Color(0.439216, 0.341176, 0.611765, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
 border_color = Color(0.0392157, 0.0352941, 0.0705882, 1)
 
 [node name="Main" type="Node2D"]
@@ -61,14 +61,14 @@ one_shot = true
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -50.0
-offset_top = 8.0
-offset_right = 50.0
-offset_bottom = 40.0
+offset_left = -24.0
+offset_top = 2.0
+offset_right = 24.0
+offset_bottom = 12.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.0392157, 0.0352941, 0.0705882, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 8
 text = "30"
 horizontal_alignment = 1
 
@@ -76,14 +76,14 @@ horizontal_alignment = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -180.0
-offset_top = 8.0
-offset_right = -12.0
-offset_bottom = 40.0
+offset_left = -100.0
+offset_top = 2.0
+offset_right = -4.0
+offset_bottom = 12.0
 grow_horizontal = 0
 theme_override_colors/font_color = Color(0.0392157, 0.0352941, 0.0705882, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 8
 text = "Gold: 0"
 horizontal_alignment = 2
 
@@ -97,13 +97,13 @@ grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HUD/RoundOverPanel"]
 layout_mode = 2
-theme_override_constants/separation = 16
+theme_override_constants/separation = 4
 
 [node name="RoundOverLabel" type="Label" parent="HUD/RoundOverPanel/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.0392157, 0.0352941, 0.0705882, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 36
+theme_override_font_sizes/font_size = 16
 text = "Round Over"
 horizontal_alignment = 1
 
@@ -114,7 +114,7 @@ theme_override_colors/font_hover_color = Color(0.0392157, 0.0352941, 0.0705882, 
 theme_override_colors/font_pressed_color = Color(1, 0.945098, 0.921569, 1)
 theme_override_colors/font_focus_color = Color(0.0392157, 0.0352941, 0.0705882, 1)
 theme_override_fonts/font = ExtResource("3")
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 8
 theme_override_styles/normal = SubResource("StyleBoxFlat_normal")
 theme_override_styles/hover = SubResource("StyleBoxFlat_hover")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_pressed")

@@ -2,18 +2,18 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://b6dw4mqj6aqq"
-path="res://.godot/imported/RussoOne-Regular.ttf-a22c4422eb96ff6a5f52169ec4a5d890.fontdata"
+uid="uid://t10i8sb6vvs1"
+path="res://.godot/imported/PressStart2P-Regular.ttf-c7d83f2c4bd295d4c960a93a703ae2b2.fontdata"
 
 [deps]
 
-source_file="res://fonts/RussoOne-Regular.ttf"
-dest_files=["res://.godot/imported/RussoOne-Regular.ttf-a22c4422eb96ff6a5f52169ec4a5d890.fontdata"]
+source_file="res://fonts/PressStart2P-Regular.ttf"
+dest_files=["res://.godot/imported/PressStart2P-Regular.ttf-c7d83f2c4bd295d4c960a93a703ae2b2.fontdata"]
 
 [params]
 
 Rendering=null
-antialiasing=1
+antialiasing=0
 generate_mipmaps=false
 disable_embedded_bitmaps=true
 multichannel_signed_distance_field=false
@@ -22,8 +22,8 @@ msdf_size=48
 allow_system_fallback=true
 force_autohinter=false
 modulate_color_glyphs=false
-hinting=1
-subpixel_positioning=4
+hinting=0
+subpixel_positioning=0
 keep_rounding_remainders=true
 oversampling=0.0
 Fallbacks=null
