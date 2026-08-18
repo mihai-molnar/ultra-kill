@@ -111,6 +111,7 @@ func _ready() -> void:
 	check(not GameState.buy_upgrade("dmg"), "refuses at max level")
 	check(GameState.upgrade_levels.dmg == 3, "level capped at 3")
 
+	GameState.currency = 100
 	check(GameState.buy_upgrade("size"), "buys size lvl 1 (cost 10)")
 	check(GameState.stats.target_size == Vector2(30, 30), "target 30x30 at lvl 1")
 	check(GameState.stats.enemy_size == Vector2(24, 24), "enemy_size stays 24x24")
@@ -118,6 +119,7 @@ func _ready() -> void:
 	GameState.buy_upgrade("size")
 	check(GameState.stats.target_size == Vector2(42, 42), "target 42x42 at lvl 3")
 
+	GameState.currency = 100
 	check(GameState.buy_upgrade("speed"), "buys speed lvl 1 (cost 7)")
 	check(GameState.stats.fire_interval == 0.8, "interval 0.8 at lvl 1")
 	GameState.buy_upgrade("speed")
