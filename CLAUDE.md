@@ -16,7 +16,7 @@ All gameplay objects are lightweight `Node2D`s with plain `Rect2.intersects` mat
 - `main.gd` / `main.tscn` — owns the round lifecycle: spawning into the `Enemies`/`Pickups` container nodes, routing `fired(rect)` to enemies, countdown + currency HUD (CanvasLayer), round-over panel with Restart. Node order matters: `TargetingArea` is deliberately last among Node2Ds so it draws on top.
 - `enemy.gd` (`class_name Enemy`) — wanders (random velocity, re-rolled every 1–3 s), bounces off viewport edges, uses `global_position` consistently. Damage is shown by `shaders/enemy_damage.gdshader` (`hp_ratio` uniform, set in `take_damage`): the purple body erodes to peach left → right; fully peach = dead. Emits `died(at_position)` before `queue_free()`.
 - `targeting_area.gd` (`class_name TargetingArea`) — follows mouse, fire timer emits `fired(rect: Rect2)`, ~0.1 s flash; firing is started/stopped only via `set_firing(bool)` from main.
-- `currency_drop.gd` (`class_name CurrencyDrop`) — pops out (0.2 s tween) to a random point 40–120 px from the kill, and is only collectable after the pop (kills happen under the reticle, so in-place drops would auto-collect).
+- `currency_drop.gd` (`class_name CurrencyDrop`) — pops out (0.2 s tween) to a random point 10–30 px from the kill, and is only collectable after the pop (kills happen under the reticle, so in-place drops would auto-collect).
 
 ## Visual identity
 
