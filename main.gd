@@ -6,6 +6,7 @@ extends Node2D
 const DROP_OFFSET_MIN := 10.0
 const DROP_OFFSET_MAX := 30.0
 const COINS_PER_KILL := 3
+const UPGRADE_TREE_SCENE := preload("res://upgrade_tree.tscn")
 
 @onready var targeting_area: TargetingArea = $TargetingArea
 @onready var enemies: Node2D = $Enemies
@@ -15,15 +16,16 @@ const COINS_PER_KILL := 3
 @onready var spawn_timer: Timer = $SpawnTimer
 @onready var time_label: Label = $HUD/TimeLabel
 @onready var currency_label: Label = $HUD/CurrencyLabel
-@onready var round_over_panel: CenterContainer = $HUD/RoundOverPanel
-@onready var restart_button: Button = $HUD/RoundOverPanel/VBoxContainer/RestartButton
+@onready var hud: CanvasLayer = $HUD
+@onready var screens: CanvasLayer = $Screens
 
 
 func _ready() -> void:
+	Input.set_custom_mouse_cursor(preload("res://sprites/cursor.png"), Input.CURSOR_ARROW, Vector2.ZERO)
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	targeting_area.fired.connect(_on_target_fired)
 	round_timer.timeout.connect(_on_round_over)
 	spawn_timer.timeout.connect(_spawn_enemy)
-	restart_button.pressed.connect(start_round)
 	GameState.currency_changed.connect(_on_currency_changed)
 	_on_currency_changed(GameState.currency)
 	start_round()
@@ -35,7 +37,8 @@ func _process(_delta: float) -> void:
 
 
 func start_round() -> void:
-	round_over_panel.visible = false
+	for child in enemies.get_children() + pickups.get_children() + effects.get_children():
+		child.queue_free()
 	for i in GameState.stats.initial_enemies:
 		_spawn_enemy()
 	round_timer.start(GameState.stats.round_duration)
@@ -93,5 +96,18 @@ func _on_round_over() -> void:
 	targeting_area.set_firing(false)
 	for child in enemies.get_children() + pickups.get_children() + effects.get_children():
 		child.queue_free()
-	time_label.text = "0"
-	round_over_panel.visible = true
+	targeting_area.visible = false
+	hud.visible = false
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	var tree: UpgradeTree = UPGRADE_TREE_SCENE.instantiate()
+	tree.start_pressed.connect(_on_start_pressed.bind(tree))
+	screens.add_child(tree)
+
+
+func _on_start_pressed(tree: UpgradeTree) -> void:
+	tree.queue_free()
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
+	targeting_area.visible = true
+	hud.visible = true
+	time_label.text = str(ceili(GameState.stats.round_duration))
+	start_round()
