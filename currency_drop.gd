@@ -8,6 +8,8 @@ extends Node2D
 const SPRITE := preload("res://sprites/drop.png")
 const SIZE := Vector2(4, 4)
 const POP_DURATION := 0.2
+const COLLECT_DURATION := 0.12
+const COLLECT_SCALE := Vector2(2.5, 2.5)
 
 var target: TargetingArea
 var _collectable := false
@@ -20,15 +22,25 @@ func _ready() -> void:
 
 
 func pop_to(dest: Vector2) -> void:
-	var tween := create_tween()
+	scale = Vector2.ZERO
+	var tween := create_tween().set_parallel()
 	tween.tween_property(self, "position", dest, POP_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	tween.finished.connect(func() -> void: _collectable = true)
+	tween.tween_property(self, "scale", Vector2.ONE, POP_DURATION).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tween.chain().tween_callback(func() -> void: _collectable = true)
 
 
 func _process(_delta: float) -> void:
 	if _collectable and target and target.get_rect().intersects(get_rect()):
-		GameState.add_currency(GameState.stats.currency_per_kill)
-		queue_free()
+		_collect()
+
+
+func _collect() -> void:
+	_collectable = false
+	GameState.add_currency(GameState.stats.currency_per_kill)
+	var tween := create_tween().set_parallel()
+	tween.tween_property(self, "scale", COLLECT_SCALE, COLLECT_DURATION)
+	tween.tween_property(self, "modulate:a", 0.0, COLLECT_DURATION)
+	tween.chain().tween_callback(queue_free)
 
 
 func get_rect() -> Rect2:

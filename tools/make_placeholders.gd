@@ -10,19 +10,21 @@ const COLORS := {
 }
 
 const ENEMY := [
-	"........................",
-	".....BB..........BB.....",
-	".....BB..........BB.....",
+	"......BB........BB......",
+	".....BPPB......BPPB.....",
+	".....BHHB......BHHB.....",
+	".....BHHB......BHHB.....",
+	".....BHHB......BHHB.....",
+	".....BHHB......BHHB.....",
+	".....BPPB......BPPB.....",
 	"....BBBBBBBBBBBBBBBB....",
 	"...BPPPPPPPPPPPPPPPPB...",
 	"..BPPPPPPPPPPPPPPPPPPB..",
-	"..BPPPPPPPPPPPPPPPPPPB..",
 	"..BPPPBBPPPPPPPPBBPPPB..",
 	"..BPPPBBPPPPPPPPBBPPPB..",
+	"..BPPPPPPPPHHPPPPPPPPB..",
+	"..BPPPPPPPBPPBPPPPPPPB..",
 	"..BPPPPPPPPPPPPPPPPPPB..",
-	"..BPPPPPPPPPPPPPPPPPPB..",
-	"..BPPPPPPPPPPPPPPPPPPB..",
-	"..BPPPPPBBBBBBBBPPPPPB..",
 	"..BPPPPPPPPPPPPPPPPPPB..",
 	"..BPPPPPPPPPPPPPPPPPPB..",
 	"..BPPPPPPPPPPPPPPPPPPB..",
@@ -31,8 +33,6 @@ const ENEMY := [
 	"......BPPB....BPPB......",
 	"......BPPB....BPPB......",
 	"......BBBB....BBBB......",
-	"........................",
-	"........................",
 	"........................",
 ]
 

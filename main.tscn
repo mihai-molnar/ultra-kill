@@ -47,6 +47,8 @@ script = ExtResource("1")
 
 [node name="Pickups" type="Node2D" parent="."]
 
+[node name="Effects" type="Node2D" parent="."]
+
 [node name="TargetingArea" type="Node2D" parent="."]
 script = ExtResource("2")
 

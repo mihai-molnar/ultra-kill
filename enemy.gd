@@ -12,12 +12,16 @@ const SPEED_MIN := 20.0
 const SPEED_MAX := 40.0
 const DIRECTION_TIME_MIN := 1.0
 const DIRECTION_TIME_MAX := 3.0
+const HIT_FLASH_TIME := 0.06
+const HIT_SQUASH := Vector2(1.25, 0.75)
+const HIT_SQUASH_TIME := 0.12
 
 var max_hp: int
 var hp: int
 var _velocity := Vector2.ZERO
 var _direction_time := 0.0
 var _sprite: Sprite2D
+var _hit_tween: Tween
 
 
 func _ready() -> void:
@@ -57,6 +61,22 @@ func take_damage(amount: int) -> void:
 	if hp == 0:
 		died.emit(global_position)
 		queue_free()
+		return
+	_play_hit_feedback()
+
+
+func _play_hit_feedback() -> void:
+	_sprite.material.set_shader_parameter("flash", 1.0)
+	_sprite.scale = HIT_SQUASH
+	if _hit_tween:
+		_hit_tween.kill()
+	_hit_tween = create_tween()
+	_hit_tween.tween_property(_sprite, "scale", Vector2.ONE, HIT_SQUASH_TIME).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	_hit_tween.parallel().tween_callback(_end_flash).set_delay(HIT_FLASH_TIME)
+
+
+func _end_flash() -> void:
+	_sprite.material.set_shader_parameter("flash", 0.0)
 
 
 func _roll_direction() -> void:
