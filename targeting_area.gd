@@ -6,9 +6,9 @@ extends Node2D
 signal fired(rect: Rect2)
 
 const FLASH_DURATION := 0.1
-const FILL_COLOR := Color(1, 1, 1, 0.22)
-const FLASH_COLOR := Color(1, 1, 1, 0.55)
-const BORDER_COLOR := Color(1, 1, 1, 0.8)
+const FILL_COLOR := Color(Palette.BLACK, 0.08)
+const FLASH_COLOR := Color(Palette.BLACK, 0.25)
+const BORDER_COLOR := Palette.BLACK
 
 var _flash_time := 0.0
 var _fire_timer: Timer

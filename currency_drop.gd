@@ -1,12 +1,11 @@
 class_name CurrencyDrop
 extends Node2D
-## Placeholder currency: small gold rectangle that pops out of a dying enemy.
+## Placeholder currency: small peach rectangle that pops out of a dying enemy.
 ## Collected (self-frees) when the targeting area passes over it, but only
 ## after the pop finishes — otherwise a kill under the reticle would
 ## auto-collect the drop the frame it spawns.
 
 const SIZE := Vector2(14, 14)
-const GOLD := Color(1.0, 0.84, 0.2)
 const POP_DURATION := 0.2
 
 var target: TargetingArea
@@ -30,4 +29,5 @@ func get_rect() -> Rect2:
 
 
 func _draw() -> void:
-	draw_rect(Rect2(-SIZE / 2.0, SIZE), GOLD, true)
+	draw_rect(Rect2(-SIZE / 2.0, SIZE), Palette.PEACH, true)
+	draw_rect(Rect2(-SIZE / 2.0, SIZE), Palette.BLACK, false, 2.0)

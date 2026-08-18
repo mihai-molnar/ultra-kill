@@ -18,6 +18,15 @@ All gameplay objects are lightweight `Node2D`s drawn via `_draw`, with plain `Re
 - `targeting_area.gd` (`class_name TargetingArea`) — follows mouse, fire timer emits `fired(rect: Rect2)`, ~0.1 s flash; firing is started/stopped only via `set_firing(bool)` from main.
 - `currency_drop.gd` (`class_name CurrencyDrop`) — pops out (0.2 s tween) to a random point 40–120 px from the kill, and is only collectable after the pop (kills happen under the reticle, so in-place drops would auto-collect).
 
+## Visual identity
+
+- **The game uses exactly four colors — never introduce any other color.** They are defined once in `palette.gd` (`class_name Palette`); always reference `Palette.*`, never inline color literals in scripts (alpha variants of the palette colors are allowed, e.g. the reticle fill). In `.tscn`/`project.godot` (where scripts can't be referenced) use the same values verbatim.
+  - `Palette.BLACK` `#0a0912` — edges and borders (also HUD text)
+  - `Palette.PURPLE` `#70579c` — enemies (the remaining-HP portion)
+  - `Palette.PEACH` `#e096a8` — hit enemies (the damage-revealed portion; also currency drops)
+  - `Palette.WHITE` `#fff1eb` — background
+- UI font: Russo One (`fonts/RussoOne-Regular.ttf`, SIL OFL — license alongside it). All labels/buttons should use it via `theme_override_fonts/font`.
+
 ## Next slice / known deferred work
 
 - Next planned feature: the level-up screen (spend currency between rounds by mutating `GameState.stats`).

@@ -1,14 +1,11 @@
 class_name Enemy
 extends Node2D
 ## Wandering enemy rectangle. Same size as the targeting area (for now).
-## HP is drawn as a dark-red bar (right-anchored) over a light-red base,
-## so damage eats the dark red from left to right:
-## fully dark = full HP, fully light = dead.
+## HP is drawn as a purple bar (right-anchored) over a peach base,
+## so damage eats the purple from left to right:
+## fully purple = full HP, fully peach = dead.
 
 signal died(at_position: Vector2)
-
-const DARK_RED := Color(0.55, 0.08, 0.08)
-const LIGHT_RED := Color(0.94, 0.55, 0.55)
 const SPEED_MIN := 80.0
 const SPEED_MAX := 160.0
 const DIRECTION_TIME_MIN := 1.0
@@ -71,6 +68,7 @@ func _bounce_off_edges() -> void:
 
 func _draw() -> void:
 	var size: Vector2 = GameState.stats.target_size
-	draw_rect(Rect2(-size / 2.0, size), LIGHT_RED, true)
+	draw_rect(Rect2(-size / 2.0, size), Palette.PEACH, true)
 	var hp_width := size.x * float(hp) / float(max_hp)
-	draw_rect(Rect2(Vector2(size.x / 2.0 - hp_width, -size.y / 2.0), Vector2(hp_width, size.y)), DARK_RED, true)
+	draw_rect(Rect2(Vector2(size.x / 2.0 - hp_width, -size.y / 2.0), Vector2(hp_width, size.y)), Palette.PURPLE, true)
+	draw_rect(Rect2(-size / 2.0, size), Palette.BLACK, false, 2.0)
