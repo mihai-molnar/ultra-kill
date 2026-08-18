@@ -5,7 +5,7 @@ extends Node2D
 ## after the pop finishes — otherwise a kill under the reticle would
 ## auto-collect the drop the frame it spawns.
 
-const SIZE := Vector2(14, 14)
+const SIZE := Vector2(4, 4)
 const POP_DURATION := 0.2
 
 var target: TargetingArea

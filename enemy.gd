@@ -6,8 +6,8 @@ extends Node2D
 ## fully purple = full HP, fully peach = dead.
 
 signal died(at_position: Vector2)
-const SPEED_MIN := 80.0
-const SPEED_MAX := 160.0
+const SPEED_MIN := 20.0
+const SPEED_MAX := 40.0
 const DIRECTION_TIME_MIN := 1.0
 const DIRECTION_TIME_MAX := 3.0
 

@@ -3,8 +3,8 @@ extends Node2D
 ## round-over UI. Future level-up screen slots in between _on_round_over
 ## and start_round.
 
-const DROP_OFFSET_MIN := 40.0
-const DROP_OFFSET_MAX := 120.0
+const DROP_OFFSET_MIN := 10.0
+const DROP_OFFSET_MAX := 30.0
 
 @onready var targeting_area: TargetingArea = $TargetingArea
 @onready var enemies: Node2D = $Enemies

@@ -10,7 +10,7 @@ var currency: int = 0
 var stats := {
 	"fire_interval": 1.0,
 	"damage": 2,
-	"target_size": Vector2(100, 100),
+	"target_size": Vector2(24, 24),
 	"round_duration": 30.0,
 	"spawn_interval": 2.0,
 	"enemy_max_hp": 10,

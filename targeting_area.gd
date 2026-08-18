@@ -50,4 +50,4 @@ func _draw() -> void:
 	var local := Rect2(-size / 2.0, size)
 	var fill := FLASH_COLOR if _flash_time > 0.0 else FILL_COLOR
 	draw_rect(local, fill, true)
-	draw_rect(local, BORDER_COLOR, false, 2.0)
+	draw_rect(local, BORDER_COLOR, false, 1.0)
