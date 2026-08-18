@@ -116,6 +116,10 @@ Layout:
 
 - **Gold label** top center: `"Gold: N"`, Press Start 2P, size 8,
   `Palette.BLACK`; updates live via `GameState.currency_changed`.
+- **Current stats readout** top left: three lines, Press Start 2P size 8,
+  `Palette.BLACK` — `"DMG: 4"`, `"FIRE: 0.8s"`, `"SIZE: 30x30"` — showing
+  the *current* values from `GameState.stats`; refreshes on
+  `upgrades_changed` so a purchase is reflected immediately.
 - **Hub** at screen center (240, 130): a 24×24 square, 1px black border,
   white fill, reticle icon (`res://sprites/icon_hub.png`). Not clickable,
   no pips, no tooltip. Visual root only.
