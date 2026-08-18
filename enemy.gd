@@ -1,7 +1,8 @@
 class_name Enemy
 extends Node2D
 ## Wandering enemy rectangle. Same size as the targeting area (for now).
-## HP is drawn as a dark-red bar (left-anchored) over a light-red base:
+## HP is drawn as a dark-red bar (right-anchored) over a light-red base,
+## so damage eats the dark red from left to right:
 ## fully dark = full HP, fully light = dead.
 
 signal died(at_position: Vector2)
@@ -72,4 +73,4 @@ func _draw() -> void:
 	var size: Vector2 = GameState.stats.target_size
 	draw_rect(Rect2(-size / 2.0, size), LIGHT_RED, true)
 	var hp_width := size.x * float(hp) / float(max_hp)
-	draw_rect(Rect2(-size / 2.0, Vector2(hp_width, size.y)), DARK_RED, true)
+	draw_rect(Rect2(Vector2(size.x / 2.0 - hp_width, -size.y / 2.0), Vector2(hp_width, size.y)), DARK_RED, true)

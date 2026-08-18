@@ -3,6 +3,9 @@ extends Node2D
 ## round-over UI. Future level-up screen slots in between _on_round_over
 ## and start_round.
 
+const DROP_OFFSET_MIN := 40.0
+const DROP_OFFSET_MAX := 120.0
+
 @onready var targeting_area: TargetingArea = $TargetingArea
 @onready var enemies: Node2D = $Enemies
 @onready var pickups: Node2D = $Pickups
@@ -62,6 +65,13 @@ func _on_enemy_died(at_position: Vector2) -> void:
 	drop.position = at_position
 	drop.target = targeting_area
 	pickups.add_child(drop)
+	var offset := Vector2.RIGHT.rotated(randf() * TAU) * randf_range(DROP_OFFSET_MIN, DROP_OFFSET_MAX)
+	var bounds := get_viewport_rect().size
+	var half := CurrencyDrop.SIZE / 2.0
+	var dest := at_position + offset
+	dest.x = clampf(dest.x, half.x, bounds.x - half.x)
+	dest.y = clampf(dest.y, half.y, bounds.y - half.y)
+	drop.pop_to(dest)
 
 
 func _on_currency_changed(amount: int) -> void:

@@ -38,7 +38,7 @@ The upgrade-ready core. Holds:
   - `fire_interval = 1.0` (seconds between shots)
   - `damage = 2` (HP per shot)
   - `target_size = Vector2(100, 100)` (targeting rectangle size; enemies use
-    the same size for now; viewport is Godot's default 1152×648)
+    the same size for now; window runs at 1920×1080 per playtest feedback)
   - `round_duration = 30.0`
   - `spawn_interval = 2.0` (one new enemy per interval)
   - `enemy_max_hp = 10`
@@ -73,9 +73,9 @@ Owns the round lifecycle:
 
 - HP starts at `stats.enemy_max_hp`; takes `stats.damage` per hit.
 - Visual: light-red full-size rect (depleted life) with a dark-red rect
-  drawn on top, anchored to the left edge, whose *width* is
-  `full_width * hp / max_hp` — at full HP fully dark red, at 0 HP fully
-  light red.
+  drawn on top, anchored to the right edge, whose *width* is
+  `full_width * hp / max_hp` — damage eats the dark red from left to
+  right; at full HP fully dark red, at 0 HP fully light red.
 - At HP ≤ 0: emit `died(position)`, then `queue_free()`.
 - Movement: random direction unit vector × constant speed; bounces off the
   viewport edges (position clamp + velocity component flip); re-rolls
@@ -84,9 +84,13 @@ Owns the round lifecycle:
 
 ### `currency_drop.gd` (Node2D, custom `_draw`)
 
-- Small rectangle spawned at a dead enemy's position.
-- Each frame, if its rect intersects the targeting rect: add
-  `stats.currency_per_kill` worth to `GameState.currency`, `queue_free()`.
+- Small rectangle that pops out of a dead enemy: spawns at the death
+  position and tweens (~0.2 s) to a random point 40–120 px away, clamped
+  to the viewport (kills happen under the reticle, so spawning in place
+  would instantly auto-collect).
+- Not collectable until the pop finishes. Then, each frame, if its rect
+  intersects the targeting rect: add `stats.currency_per_kill` worth to
+  `GameState.currency`, `queue_free()`.
 
 ### HUD (CanvasLayer in `main.tscn`)
 
