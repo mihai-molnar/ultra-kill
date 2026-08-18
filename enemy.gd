@@ -1,11 +1,13 @@
 class_name Enemy
 extends Node2D
-## Wandering enemy rectangle. Same size as the targeting area (for now).
-## HP is drawn as a purple bar (right-anchored) over a peach base,
-## so damage eats the purple from left to right:
-## fully purple = full HP, fully peach = dead.
+## Wandering enemy sprite. Same size as the targeting area (for now).
+## Damage is shown by the enemy_damage shader: the purple body erodes to
+## peach left to right (fully purple = full HP, fully peach = dead).
 
 signal died(at_position: Vector2)
+
+const SPRITE := preload("res://sprites/enemy.png")
+const DAMAGE_SHADER := preload("res://shaders/enemy_damage.gdshader")
 const SPEED_MIN := 20.0
 const SPEED_MAX := 40.0
 const DIRECTION_TIME_MIN := 1.0
@@ -15,11 +17,19 @@ var max_hp: int
 var hp: int
 var _velocity := Vector2.ZERO
 var _direction_time := 0.0
+var _sprite: Sprite2D
 
 
 func _ready() -> void:
 	max_hp = GameState.stats.enemy_max_hp
 	hp = max_hp
+	_sprite = Sprite2D.new()
+	_sprite.texture = SPRITE
+	var mat := ShaderMaterial.new()
+	mat.shader = DAMAGE_SHADER
+	mat.set_shader_parameter("hp_ratio", 1.0)
+	_sprite.material = mat
+	add_child(_sprite)
 	_roll_direction()
 
 
@@ -29,7 +39,6 @@ func _process(delta: float) -> void:
 		_roll_direction()
 	global_position += _velocity * delta
 	_bounce_off_edges()
-	queue_redraw()
 
 
 func get_rect() -> Rect2:
@@ -44,7 +53,7 @@ func on_target_fired(target_rect: Rect2) -> void:
 
 func take_damage(amount: int) -> void:
 	hp = maxi(hp - amount, 0)
-	queue_redraw()
+	_sprite.material.set_shader_parameter("hp_ratio", float(hp) / float(max_hp))
 	if hp == 0:
 		died.emit(global_position)
 		queue_free()
@@ -64,11 +73,3 @@ func _bounce_off_edges() -> void:
 		_velocity.y = -_velocity.y
 	global_position.x = clampf(global_position.x, half.x, bounds.x - half.x)
 	global_position.y = clampf(global_position.y, half.y, bounds.y - half.y)
-
-
-func _draw() -> void:
-	var size: Vector2 = GameState.stats.target_size
-	draw_rect(Rect2(-size / 2.0, size), Palette.PEACH, true)
-	var hp_width := size.x * float(hp) / float(max_hp)
-	draw_rect(Rect2(Vector2(size.x / 2.0 - hp_width, -size.y / 2.0), Vector2(hp_width, size.y)), Palette.PURPLE, true)
-	draw_rect(Rect2(-size / 2.0, size), Palette.BLACK, false, 2.0)
