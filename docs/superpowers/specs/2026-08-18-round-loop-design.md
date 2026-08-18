@@ -1,7 +1,8 @@
 # Ultra Kill — Core Round Loop Design
 
 Date: 2026-08-18
-Status: Approved (chat) — pending spec review
+Status: Implemented and merged (2026-08-18), amended per playtest feedback
+(1920×1080 window, left-to-right damage bar, currency pop-out)
 
 ## Overview
 
