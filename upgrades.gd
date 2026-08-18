@@ -14,12 +14,12 @@ const DEFS := {
 		"name": "SIZE",
 		"description": "+25% target area per level",
 		"icon": "res://sprites/icon_size.png",
-		"costs": [10, 20, 18],
+		"costs": [10, 20, 30],
 	},
 	"speed": {
 		"name": "SPEED",
 		"description": "Fires faster each level",
 		"icon": "res://sprites/icon_speed.png",
-		"costs": [7, 11, 12],
+		"costs": [7, 25, 35],
 	},
 }
