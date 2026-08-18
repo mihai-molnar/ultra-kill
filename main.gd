@@ -1,7 +1,7 @@
 extends Node2D
-## Owns the round lifecycle: spawning, fire routing, countdown, cleanup,
-## round-over UI. Future level-up screen slots in between _on_round_over
-## and start_round.
+## Owns the round lifecycle: spawning, fire routing, countdown, cleanup;
+## on round over it mounts the upgrade tree on the Screens CanvasLayer and
+## restarts via its start_pressed signal.
 
 const DROP_OFFSET_MIN := 10.0
 const DROP_OFFSET_MAX := 30.0

@@ -1,8 +1,8 @@
 class_name UpgradeTree
 extends Control
 ## Full-screen between-rounds upgrade screen. Draws the hub square and the
-## hub-to-node connector lines itself (children draw over the line ends);
-## the three UpgradeNodes are created in code from NODE_POSITIONS.
+## hub-to-node connector lines (trimmed to node edges); the three UpgradeNodes
+## are created in code from NODE_POSITIONS.
 
 signal start_pressed
 
@@ -47,7 +47,12 @@ func _draw() -> void:
 	# above this _draw and hide the lines and hub.
 	draw_rect(Rect2(Vector2.ZERO, size), Palette.WHITE, true)
 	for id in NODE_POSITIONS:
-		draw_line(HUB_POS, NODE_POSITIONS[id], Palette.BLACK, 1.0)
+		var node_pos: Vector2 = NODE_POSITIONS[id]
+		var dir := (node_pos - HUB_POS).normalized()
+		# Vertical approaches pass the pip row (2px gap + 4px pips below the
+		# 24px square), so trim 18 from the node center instead of 12.
+		var node_trim := 18.0 if absf(dir.y) > absf(dir.x) else 12.0
+		draw_line(HUB_POS + dir * SQUARE_HALF.x, node_pos - dir * node_trim, Palette.BLACK, 1.0)
 	var hub := Rect2(HUB_POS - SQUARE_HALF, SQUARE_HALF * 2.0)
 	draw_rect(hub, Palette.WHITE, true)
 	draw_rect(hub, Palette.BLACK, false, 1.0)
