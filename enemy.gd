@@ -29,7 +29,7 @@ func _process(delta: float) -> void:
 	_direction_time -= delta
 	if _direction_time <= 0.0:
 		_roll_direction()
-	position += _velocity * delta
+	global_position += _velocity * delta
 	_bounce_off_edges()
 	queue_redraw()
 
@@ -60,12 +60,12 @@ func _roll_direction() -> void:
 func _bounce_off_edges() -> void:
 	var half: Vector2 = GameState.stats.target_size / 2.0
 	var bounds := get_viewport_rect().size
-	if position.x < half.x or position.x > bounds.x - half.x:
+	if global_position.x < half.x or global_position.x > bounds.x - half.x:
 		_velocity.x = -_velocity.x
-	if position.y < half.y or position.y > bounds.y - half.y:
+	if global_position.y < half.y or global_position.y > bounds.y - half.y:
 		_velocity.y = -_velocity.y
-	position.x = clampf(position.x, half.x, bounds.x - half.x)
-	position.y = clampf(position.y, half.y, bounds.y - half.y)
+	global_position.x = clampf(global_position.x, half.x, bounds.x - half.x)
+	global_position.y = clampf(global_position.y, half.y, bounds.y - half.y)
 
 
 func _draw() -> void:
