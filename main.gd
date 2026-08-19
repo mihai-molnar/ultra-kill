@@ -5,7 +5,6 @@ extends Node2D
 
 const DROP_OFFSET_MIN := 10.0
 const DROP_OFFSET_MAX := 30.0
-const COINS_PER_KILL := 3
 const UPGRADE_TREE_SCENE := preload("res://upgrade_tree.tscn")
 
 @onready var targeting_area: TargetingArea = $TargetingArea
@@ -25,7 +24,7 @@ func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
 	targeting_area.fired.connect(_on_target_fired)
 	round_timer.timeout.connect(_on_round_over)
-	spawn_timer.timeout.connect(_spawn_enemy)
+	spawn_timer.timeout.connect(_on_spawn_tick)
 	GameState.currency_changed.connect(_on_currency_changed)
 	_on_currency_changed(GameState.currency)
 	start_round()
@@ -40,15 +39,20 @@ func start_round() -> void:
 	for child in enemies.get_children() + pickups.get_children() + effects.get_children():
 		child.queue_free()
 	for i in GameState.stats.initial_enemies:
-		_spawn_enemy()
+		_spawn_enemy(EnemyTypes.DEFS.rabbit)
 	round_timer.start(GameState.stats.round_duration)
 	spawn_timer.start(GameState.stats.spawn_interval)
 	targeting_area.set_firing(true)
 
 
-func _spawn_enemy() -> void:
+func _on_spawn_tick() -> void:
+	_spawn_enemy(EnemyTypes.DEFS.rabbit)
+
+
+func _spawn_enemy(def: Dictionary) -> void:
 	var enemy := Enemy.new()
-	var half: Vector2 = GameState.stats.enemy_size / 2.0
+	enemy.setup(def, GameState.hp_mult(), GameState.speed_mult())
+	var half: Vector2 = def.size / 2.0
 	var bounds := get_viewport_rect().size
 	enemy.position = Vector2(
 		randf_range(half.x, bounds.x - half.x),
@@ -63,7 +67,7 @@ func _on_target_fired(rect: Rect2) -> void:
 		enemy.on_target_fired(rect)
 
 
-func _on_enemy_died(at_position: Vector2) -> void:
+func _on_enemy_died(at_position: Vector2, coins: int) -> void:
 	if round_timer.is_stopped():
 		return
 	var burst := KillBurst.new()
@@ -71,15 +75,15 @@ func _on_enemy_died(at_position: Vector2) -> void:
 	effects.add_child(burst)
 	var bounds := get_viewport_rect().size
 	var half := CurrencyDrop.SIZE / 2.0
-	# Each coin gets a random angle inside its own third of the circle (the
-	# thirds themselves randomly rotated) so the three never clump together.
+	# Each coin gets a random angle inside its own slice of the circle (the
+	# slices themselves randomly rotated) so drops never clump together.
 	var base_angle := randf() * TAU
-	for i in COINS_PER_KILL:
+	for i in coins:
 		var drop := CurrencyDrop.new()
 		drop.position = at_position
 		drop.target = targeting_area
 		pickups.add_child(drop)
-		var angle := base_angle + (float(i) + randf()) * TAU / COINS_PER_KILL
+		var angle := base_angle + (float(i) + randf()) * TAU / coins
 		var offset := Vector2.RIGHT.rotated(angle) * randf_range(DROP_OFFSET_MIN, DROP_OFFSET_MAX)
 		var dest := at_position + offset
 		dest.x = clampf(dest.x, half.x, bounds.x - half.x)

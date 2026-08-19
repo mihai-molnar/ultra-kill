@@ -1,12 +1,12 @@
 class_name Enemy
 extends Node2D
-## Wandering enemy sprite. Same size as the targeting area (for now).
+## Wandering enemy sprite. Renders whichever EnemyTypes def it was setup()
+## with (sprite, size, HP, coins, speed all come from the def).
 ## Damage is shown by the enemy_damage shader: the purple body erodes to
 ## peach left to right (fully purple = full HP, fully peach = dead).
 
-signal died(at_position: Vector2)
+signal died(at_position: Vector2, coins: int)
 
-const SPRITE := preload("res://sprites/enemy.png")
 const DAMAGE_SHADER := preload("res://shaders/enemy_damage.gdshader")
 const SPEED_MIN := 20.0
 const SPEED_MAX := 40.0
@@ -18,17 +18,28 @@ const HIT_SQUASH_TIME := 0.12
 
 var max_hp: int
 var hp: int
+var coins: int
+var _def: Dictionary = EnemyTypes.DEFS.rabbit
+var _speed_factor := 1.0
 var _velocity := Vector2.ZERO
 var _direction_time := 0.0
 var _sprite: Sprite2D
 var _hit_tween: Tween
 
 
+func setup(def: Dictionary, hp_mult: float, speed_mult: float) -> void:
+	_def = def
+	max_hp = ceili(def.max_hp * hp_mult)
+	coins = ceili(def.coins * hp_mult)
+	_speed_factor = def.speed_scale * speed_mult
+
+
 func _ready() -> void:
-	max_hp = GameState.stats.enemy_max_hp
+	if max_hp == 0:  # setup() not called — default to an unscaled rabbit
+		setup(EnemyTypes.DEFS.rabbit, 1.0, 1.0)
 	hp = max_hp
 	_sprite = Sprite2D.new()
-	_sprite.texture = SPRITE
+	_sprite.texture = load(_def.sprite)
 	var mat := ShaderMaterial.new()
 	mat.shader = DAMAGE_SHADER
 	mat.set_shader_parameter("hp_ratio", 1.0)
@@ -46,7 +57,7 @@ func _process(delta: float) -> void:
 
 
 func get_rect() -> Rect2:
-	var size: Vector2 = GameState.stats.enemy_size
+	var size: Vector2 = _def.size
 	return Rect2(global_position - size / 2.0, size)
 
 
@@ -59,7 +70,7 @@ func take_damage(amount: int) -> void:
 	hp = maxi(hp - amount, 0)
 	_sprite.material.set_shader_parameter("hp_ratio", float(hp) / float(max_hp))
 	if hp == 0:
-		died.emit(global_position)
+		died.emit(global_position, coins)
 		queue_free()
 		return
 	_play_hit_feedback()
@@ -80,12 +91,12 @@ func _end_flash() -> void:
 
 
 func _roll_direction() -> void:
-	_velocity = Vector2.RIGHT.rotated(randf() * TAU) * randf_range(SPEED_MIN, SPEED_MAX)
+	_velocity = Vector2.RIGHT.rotated(randf() * TAU) * randf_range(SPEED_MIN, SPEED_MAX) * _speed_factor
 	_direction_time = randf_range(DIRECTION_TIME_MIN, DIRECTION_TIME_MAX)
 
 
 func _bounce_off_edges() -> void:
-	var half: Vector2 = GameState.stats.enemy_size / 2.0
+	var half: Vector2 = _def.size / 2.0
 	var bounds := get_viewport_rect().size
 	if global_position.x < half.x or global_position.x > bounds.x - half.x:
 		_velocity.x = -_velocity.x

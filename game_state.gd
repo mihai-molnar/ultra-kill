@@ -12,10 +12,8 @@ const BASE_STATS := {
 	"fire_interval": 1.0,
 	"damage": 2,
 	"target_size": Vector2(24, 24),
-	"enemy_size": Vector2(24, 24),
 	"round_duration": 30.0,
 	"spawn_interval": 2.0,
-	"enemy_max_hp": 10,
 	"initial_enemies": 10,
 	"currency_per_kill": 1,
 }
