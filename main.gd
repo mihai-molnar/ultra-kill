@@ -1,10 +1,15 @@
 extends Node2D
 ## Owns the round lifecycle: spawning, fire routing, countdown, cleanup;
-## on round over it mounts the upgrade tree on the Screens CanvasLayer and
-## restarts via its start_pressed signal.
+## spawning uses per-round enemy pools (rabbit → pig → giant variants), spawns
+## a boss on rounds 5, 10, 15, etc., caps enemies at 20, and adapts spawn rate
+## (0.5s below 6 enemies, else normal interval). On round over it mounts the
+## upgrade tree on the Screens CanvasLayer and restarts via its start_pressed signal.
 
 const DROP_OFFSET_MIN := 10.0
 const DROP_OFFSET_MAX := 30.0
+const MAX_ENEMIES := 20
+const LOW_ENEMIES := 6
+const FAST_SPAWN_INTERVAL := 0.5
 const UPGRADE_TREE_SCENE := preload("res://upgrade_tree.tscn")
 
 @onready var targeting_area: TargetingArea = $TargetingArea
@@ -36,17 +41,32 @@ func _process(_delta: float) -> void:
 
 
 func start_round() -> void:
+	GameState.advance_round()
 	for child in enemies.get_children() + pickups.get_children() + effects.get_children():
 		child.queue_free()
 	for i in GameState.stats.initial_enemies:
-		_spawn_enemy(EnemyTypes.DEFS.rabbit)
+		_spawn_enemy(_pick_type())
+	if GameState.round_number % 5 == 0:
+		_spawn_enemy(EnemyTypes.BOSS)
 	round_timer.start(GameState.stats.round_duration)
 	spawn_timer.start(GameState.stats.spawn_interval)
 	targeting_area.set_firing(true)
 
 
 func _on_spawn_tick() -> void:
-	_spawn_enemy(EnemyTypes.DEFS.rabbit)
+	# queue_free'd children linger until end of frame, so count real ones.
+	var alive := 0
+	for enemy in enemies.get_children():
+		if not enemy.is_queued_for_deletion():
+			alive += 1
+	if alive < MAX_ENEMIES:
+		_spawn_enemy(_pick_type())
+		alive += 1
+	spawn_timer.start(FAST_SPAWN_INTERVAL if alive < LOW_ENEMIES else GameState.stats.spawn_interval)
+
+
+func _pick_type() -> Dictionary:
+	return EnemyTypes.unlocked(GameState.round_number).pick_random()
 
 
 func _spawn_enemy(def: Dictionary) -> void:
