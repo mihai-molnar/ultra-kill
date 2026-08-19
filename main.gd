@@ -10,6 +10,8 @@ const DROP_OFFSET_MAX := 30.0
 const MAX_ENEMIES := 20
 const LOW_ENEMIES := 6
 const FAST_SPAWN_INTERVAL := 0.5
+const SPLASH_HOLD := 0.8
+const SPLASH_FADE := 0.4
 const UPGRADE_TREE_SCENE := preload("res://upgrade_tree.tscn")
 
 @onready var targeting_area: TargetingArea = $TargetingArea
@@ -20,8 +22,11 @@ const UPGRADE_TREE_SCENE := preload("res://upgrade_tree.tscn")
 @onready var spawn_timer: Timer = $SpawnTimer
 @onready var time_label: Label = $HUD/TimeLabel
 @onready var currency_label: Label = $HUD/CurrencyLabel
+@onready var round_label: Label = $HUD/RoundLabel
 @onready var hud: CanvasLayer = $HUD
 @onready var screens: CanvasLayer = $Screens
+
+var _splash_tween: Tween
 
 
 func _ready() -> void:
@@ -48,9 +53,22 @@ func start_round() -> void:
 		_spawn_enemy(_pick_type())
 	if GameState.round_number % 5 == 0:
 		_spawn_enemy(EnemyTypes.BOSS)
+	_show_round_splash()
 	round_timer.start(GameState.stats.round_duration)
 	spawn_timer.start(GameState.stats.spawn_interval)
 	targeting_area.set_firing(true)
+
+
+func _show_round_splash() -> void:
+	round_label.text = "ROUND %d" % GameState.round_number
+	round_label.modulate.a = 1.0
+	round_label.visible = true
+	if _splash_tween:
+		_splash_tween.kill()
+	_splash_tween = create_tween()
+	_splash_tween.tween_interval(SPLASH_HOLD)
+	_splash_tween.tween_property(round_label, "modulate:a", 0.0, SPLASH_FADE)
+	_splash_tween.tween_callback(func() -> void: round_label.visible = false)
 
 
 func _on_spawn_tick() -> void:
