@@ -1,9 +1,10 @@
 extends Node2D
-## Owns the round lifecycle: spawning, fire routing, countdown, cleanup;
-## spawning uses per-round enemy pools (rabbit → pig → giant variants), spawns
-## a boss on rounds 5, 10, 15, etc., caps enemies at 20, and adapts spawn rate
-## (0.5s below 6 enemies, else normal interval). On round over it mounts the
-## upgrade tree on the Screens CanvasLayer and restarts via its start_pressed signal.
+## Owns the round lifecycle: spawning, fire routing, countdown, cleanup, and
+## round splash display; spawning uses per-round enemy pools (rabbit → pig →
+## giant variants), spawns a boss on rounds 5, 10, 15, etc., caps enemies at 20,
+## and adapts spawn rate (0.5s below 6 enemies, else normal interval). On round
+## over it mounts the upgrade tree on the Screens CanvasLayer and restarts via
+## its start_pressed signal.
 
 const DROP_OFFSET_MIN := 10.0
 const DROP_OFFSET_MAX := 30.0
