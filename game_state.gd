@@ -3,6 +3,7 @@ extends Node
 ## The upgrade tree calls buy_upgrade between rounds; gameplay code must
 ## read stats from here instead of hard-coding numbers. Stats are always
 ## recomputed from BASE_STATS + upgrade_levels (idempotent, no drift).
+## Also tracks round number and escalation state (session-only, like currency).
 
 signal currency_changed(amount: int)
 signal upgrades_changed
@@ -23,14 +24,41 @@ const DAMAGE_PER_LEVEL := 2
 const SIZE_PER_LEVEL := 0.25
 const FIRE_INTERVALS := [1.0, 0.8, 0.6, 0.4]
 
+const FRENZY_CHANCE := 0.3
+const TOUGHNESS_HP_STEP := 0.2
+const FRENZY_SPEED_MULT := 1.5
+const ESCALATION_START_ROUND := 6
+
 var currency: int = 0
 var stats := BASE_STATS.duplicate()
 var upgrade_levels := {"dmg": 0, "size": 0, "speed": 0}
+
+var round_number: int = 0
+var toughness_level: int = 0
+var frenzy: bool = false
 
 
 func add_currency(amount: int) -> void:
 	currency += amount
 	currency_changed.emit(currency)
+
+
+func advance_round() -> void:
+	round_number += 1
+	frenzy = false
+	if round_number >= ESCALATION_START_ROUND:
+		if randf() < FRENZY_CHANCE:
+			frenzy = true
+		else:
+			toughness_level += 1
+
+
+func hp_mult() -> float:
+	return 1.0 + TOUGHNESS_HP_STEP * toughness_level
+
+
+func speed_mult() -> float:
+	return FRENZY_SPEED_MULT if frenzy else 1.0
 
 
 func buy_upgrade(id: String) -> bool:
